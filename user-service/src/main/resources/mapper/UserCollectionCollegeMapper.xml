@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.user.mapper.UserCollectionCollegeMapper">
+
+    <insert id="insert">
+        INSERT INTO user_collection_college (
+            user_id,
+            college_id
+        ) VALUES (
+            #{userId},
+            #{collegeId}
+         )
+    </insert>
+
+    <delete id="deleteByUserIdAndCollegeId">
+        DELETE
+        FROM user_collection_college
+        WHERE user_id = #{userId} AND college_id = #{collegeId}
+    </delete>
+
+    <select id="selectUserIdAndCollegeId" resultType="com.wx2.user.model.entity.UserCollectionCollege">
+        SELECT *
+        FROM user_collection_college
+        WHERE user_id = #{userId} AND college_id = #{collegeId}
+    </select>
+</mapper>

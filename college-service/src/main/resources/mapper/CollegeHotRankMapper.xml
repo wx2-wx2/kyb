@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.college.mapper.CollegeHotRankMapper">
+
+    <delete id="deleteByRankTypeAndDate">
+        DELETE FROM college_hot_rank
+        WHERE rank_type = #{rankType}
+          AND rank_date = #{rankDate}
+    </delete>
+
+    <insert id="batchInsert">
+        INSERT INTO college_hot_rank (
+            rank_type, college_id, `rank`,
+            hot_score, rank_date
+        ) VALUES
+        <foreach collection="rankList" item="item" separator=",">
+            (
+            #{item.rankType},
+            #{item.collegeId},
+            #{item.rank},
+            #{item.hotScore},
+            #{item.rankDate}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByTypeAndDate" resultType="com.wx2.college.model.entity.CollegeHotRank">
+        SELECT
+            id,
+            rank_type,
+            college_id,
+            `rank`,
+            hot_score,
+            rank_date,
+            create_time,
+            update_time
+        FROM
+            college_hot_rank
+        WHERE rank_type = #{rankType}
+          AND rank_date = #{rankDate}
+        ORDER BY
+            `rank` ASC
+    </select>
+</mapper>

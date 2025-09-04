@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.college.mapper.CollegeSearchLogMapper">
+
+    <insert id="insertByCollegeIdAndIp">
+        INSERT INTO college_search_log (
+            user_id,
+            college_id,
+            ip,
+            is_click
+        ) VALUES (
+             #{userId},
+             #{collegeId},
+             #{ip},
+             1
+         )
+    </insert>
+    <select id="selectValidSearchData" resultType="com.wx2.college.model.dto.ValidSearchDTO">
+        SELECT
+            college_id AS collegeId,
+            MAX(is_click) AS isClick
+        FROM college_search_log
+        WHERE create_time BETWEEN #{startTime} AND #{endTime}
+        GROUP BY college_id, ip
+    </select>
+
+</mapper>

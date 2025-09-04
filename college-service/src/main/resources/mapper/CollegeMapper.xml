@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.college.mapper.CollegeMapper">
+
+    <select id="selectById" resultType="com.wx2.college.model.entity.College">
+        SELECT
+            id, college_code, college_name, short_name,
+            province, city, level, type, nature,
+            has_graduate_school, introduction, hot_score, collect_count
+        FROM college
+        WHERE id = #{id}
+    </select>
+
+    <select id="countByQuery" resultType="java.lang.Long">
+        SELECT COUNT(DISTINCT c.id)
+        FROM college c
+        LEFT JOIN college_major m ON c.id = m.college_id
+        <where>
+            <if test="province != null and province != ''">
+                AND c.province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                AND c.city = #{city}
+            </if>
+            <if test="level != null">
+                AND c.level = #{level}
+            </if>
+            <if test="type != null">
+                AND c.type = #{type}
+            </if>
+            <if test="majorName != null and majorName != ''">
+                AND m.major_name LIKE CONCAT('%', #{majorName}, '%')
+            </if>
+            <if test="degreeType != null">
+                AND m.degree_type = #{degreeType}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByQuery" resultType="com.wx2.college.model.entity.College">
+        SELECT DISTINCT c.*
+        FROM college c
+        LEFT JOIN college_major m ON c.id = m.college_id
+        <where>
+            <if test="province != null and province != ''">
+                AND c.province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                AND c.city = #{city}
+            </if>
+            <if test="level != null">
+                AND c.level = #{level}
+            </if>
+            <if test="type != null">
+                AND c.type = #{type}
+            </if>
+            <if test="majorName != null and majorName != ''">
+                AND m.major_name LIKE CONCAT('%', #{majorName}, '%')
+            </if>
+            <if test="degreeType != null">
+                AND m.degree_type = #{degreeType}
+            </if>
+        </where>
+        <if test="sortField != null and sortField != ''">
+            ORDER BY ${sortField} ${sortDirection}
+        </if>
+        <if test="sortField == null or sortField == ''">
+            ORDER BY c.college_name ASC
+        </if>
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="selectAllCollegeIds" resultType="java.lang.Long">
+        SELECT id FROM college
+    </select>
+
+    <update id="batchUpdateHotScore">
+        UPDATE college
+        SET hot_score = CASE
+        <!-- 遍历scoreMap，对有搜索记录的院校设置计算得分 -->
+        <foreach collection="scoreMap.entrySet()" item="score" index="collegeId">
+            WHEN id = #{collegeId} THEN #{score}
+        </foreach>
+        <!-- 无搜索记录的院校，热度分设为0 -->
+        ELSE 0
+        END
+        <!-- 用临时表包装子查询 -->
+        WHERE id IN (
+        SELECT id FROM (SELECT id FROM college) AS temp
+        )
+    </update>
+
+    <select id="selectAllOrderByHotScore" resultType="com.wx2.college.model.entity.College">
+        SELECT * FROM college
+        WHERE hot_score > 0
+        ORDER BY hot_score DESC, id ASC
+    </select>
+
+    <select id="selectBatchIds" resultType="com.wx2.college.model.entity.College">
+        SELECT * FROM college
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateCollectCountById">
+        UPDATE college
+        SET collect_count = collect_count + #{change}
+        WHERE id = #{id}
+    </update>
+</mapper>

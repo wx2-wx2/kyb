@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-route
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/**, /api/address/**, /api/collection/**, /api/coupon/**
+        - id: question-route
+          uri: lb://question-service
+          predicates:
+            - Path=/api/question/**, /api/knowledge/**, /api/relation/**
+        - id: college-route
+          uri: lb://college-service
+          predicates:
+            - Path=/api/college/**
+        - id: product-route
+          uri: lb://product-service
+          predicates:
+            - Path=/api/product/**
+        - id: cart-route
+          uri: lb://cart-service
+          predicates:
+            - Path=/api/cart/**
+        - id: order-route
+          uri: lb://order-service
+          predicates:
+            - Path=/api/order/**
+        - id: payment-route
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payment/**
+        - id: ai-route
+          uri: lb://ai-service
+          predicates:
+            - Path=/api/ai/**, /api/conversation/**

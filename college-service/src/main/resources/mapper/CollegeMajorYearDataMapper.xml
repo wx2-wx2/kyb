@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.college.mapper.CollegeMajorYearDataMapper">
+
+    <select id="selectByMajorId" resultType="com.wx2.college.model.entity.CollegeMajorYearData">
+        SELECT
+            id, major_id, `year`, research_direction,
+            score_line, enrollment, actual_enrollment, apply_count
+        FROM college_major_year_data
+        WHERE major_id = #{majorId}
+    </select>
+</mapper>

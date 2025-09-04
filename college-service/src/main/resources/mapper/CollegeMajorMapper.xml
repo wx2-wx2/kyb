@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.college.mapper.CollegeMajorMapper">
+
+    <select id="selectByCollegeId" resultType="com.wx2.college.model.entity.CollegeMajor">
+        SELECT
+            id, major_code, major_name, degree_type,
+            discipline, introduction
+        FROM college_major
+        WHERE college_id = #{collegeId}
+        ORDER BY major_name ASC
+    </select>
+</mapper>

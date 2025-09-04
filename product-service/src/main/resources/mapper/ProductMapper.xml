@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.product.mapper.ProductMapper">
+
+    <select id="countByQuery" resultType="java.lang.Long"
+            parameterType="com.wx2.common.model.query.ProductPageQuery">
+        SELECT COUNT(1)
+        FROM product
+        <where>
+            <if test="category != null">
+                AND category = #{category}
+            </if>
+            <if test="subject != null and subject != ''">
+                AND subject = #{subject}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByQuery" resultType="com.wx2.product.model.entity.Product"
+            parameterType="com.wx2.common.model.query.ProductPageQuery">
+        SELECT *
+        FROM product
+        <where>
+            <if test="category != null">
+                AND category = #{category}
+            </if>
+            <if test="subject != null and subject != ''">
+                AND subject = #{subject}
+            </if>
+        </where>
+        <if test="sortField != null and sortField != ''">
+            ORDER BY ${sortField} ${sortDirection}
+        </if>
+        <if test="sortField == null or sortField == ''">
+            ORDER BY sold Desc
+        </if>
+        LIMIT #{offset}, #{size}
+    </select>
+</mapper>

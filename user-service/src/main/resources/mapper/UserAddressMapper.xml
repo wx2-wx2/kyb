@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wx2.user.mapper.UserAddressMapper">
+    <select id="selectByUserId" resultType="com.wx2.user.model.entity.UserAddress">
+        SELECT
+            id,
+            user_id,
+            receiver,
+            phone,
+            province,
+            city,
+            district,
+            detail_address,
+            is_default,
+            create_time,
+            update_time
+        FROM
+            user_address
+        WHERE
+            user_id = #{userId}
+        ORDER BY
+            is_default DESC,
+            update_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.wx2.user.model.entity.UserAddress">
+        SELECT
+            id,
+            user_id,
+            receiver,
+            phone,
+            province,
+            city,
+            district,
+            detail_address,
+            is_default,
+            create_time,
+            update_time
+        FROM
+            user_address
+        WHERE
+            id = #{id}
+    </select>
+
+    <update id="updateNonDefaultByUserId">
+        UPDATE user_address
+        SET is_default = 0
+        WHERE user_id = #{userId}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO user_address (
+            user_id,
+            receiver,
+            phone,
+            province,
+            city,
+            district,
+            detail_address,
+            is_default
+        ) VALUES (
+            #{userId},
+            #{receiver},
+            #{phone},
+            #{province},
+            #{city},
+            #{district},
+            #{detailAddress},
+            #{isDefault}
+        )
+    </insert>
+
+    <select id="selectByIdAndUserId" resultType="com.wx2.user.model.entity.UserAddress">
+        SELECT
+            id,
+            user_id,
+            receiver,
+            phone,
+            province,
+            city,
+            district,
+            detail_address,
+            is_default,
+            create_time,
+            update_time
+        FROM
+            user_address
+        WHERE
+            id = #{id} AND user_id = #{userId}
+    </select>
+
+    <update id="updateById" parameterType="com.wx2.user.model.entity.UserAddress">
+        UPDATE user_address
+        <set>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="detailAddress != null">detail_address = #{detailAddress},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM user_address
+        WHERE id = #{id}
+    </delete>
+</mapper>

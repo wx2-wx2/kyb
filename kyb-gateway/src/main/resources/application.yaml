@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    include: route
+  application:
+    name: kyb-gateway
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+kyb:
+  jwt:
+    location: classpath:kyb.jks
+    alias: kyb
+    password: 123456
+    tokenTTL: 2h
+  auth:
+    excludePaths:
+      - /api/user/login
+      - /api/user/register
+      - /api/question/{questionId}
+      - /api/question/page
+      - /api/question/rank
+      - /api/college/{collegeId}
+      - /api/college/batch-get
+      - /api/college/page
+      - /api/college/major/{majorId}
+      - /api/college/rank
+      - /api/product/{productId}
+      - /api/product/batch-get
+      - /api/product/page
+      - /api/ai

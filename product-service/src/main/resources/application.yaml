@@ -1,0 +1,54 @@
+server:
+  port: 8003
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/kyb-product?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+  application:
+    name: product-service
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      config:
+        namespace: ${spring.profiles.active:dev}
+        import-check:
+          enabled: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      database: 3
+  config:
+    import:
+      - nacos:common.yaml
+
+seata:
+  enabled: true
+  application-id: seata-server
+  tx-service-group: default_tx_group
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      group: DEFAULT_GROUP
+      namespace: seata
+      cluster: default
+  config:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      namespace: seata
+      group: DEFAULT_GROUP
+      data-id: seataServer.properties
+feign:
+  sentinel:
+    enabled: true
