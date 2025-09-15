@@ -11,9 +11,17 @@ spring:
   application:
     name: ai-service
   ai:
+    vectorstore:
+      redis:
+        initialize-schema: true
+        index-name: custom-index
+        prefix: custom-prefix
     openai:
       base-url: https://dashscope.aliyuncs.com/compatible-mode
       api-key: ${BL_API_KEY}
+      embedding:
+        options:
+          model: text-embedding-v3
       chat:
         options:
           model: qwen-max

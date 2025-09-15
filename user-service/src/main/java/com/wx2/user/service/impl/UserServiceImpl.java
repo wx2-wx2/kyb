@@ -2,6 +2,7 @@ package com.wx2.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.wx2.common.aspect.KybLog;
 import com.wx2.common.error.UserError;
 import com.wx2.common.exception.BizException;
 import com.wx2.common.utils.UserContext;
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
     private final StringRedisTemplate stringRedisTemplate;
 
     @Override
+    @KybLog
     @Transactional
     public UserLoginVO login(UserLoginQuery query) {
         String account = query.getAccount();
